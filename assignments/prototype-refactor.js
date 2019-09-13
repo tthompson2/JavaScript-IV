@@ -36,10 +36,10 @@ class GameObject {
   * should inherit destroy() from GameObject's prototype
 */
 
-class CharacterStats {
+class CharacterStats extends GameObject{
 
 constructor(characterAttributes) {
-  GameObject.call(this, characterAttributes);
+  super(characterAttributes);
   this.healthPoints = characterAttributes.healthPoints;
 }
 
@@ -48,8 +48,6 @@ takeDamage() {
 }
 
 }
-
-CharacterStats.prototype = Object.create(GameObject.prototype);
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -61,15 +59,14 @@ CharacterStats.prototype = Object.create(GameObject.prototype);
   * should inherit takeDamage() from CharacterStats
 */
 
-class Humanoid {
+class Humanoid extends CharacterStats {
 
 constructor(humanoidAttributes) {
   
-  new CharacterStats.call(this, humanoidAttributes);
+  super(humanoidAttributes);
   this.team = humanoidAttributes.team;
   this.weapons = humanoidAttributes.weapons;
-  this.language = humanoidAttributes.language;
-  
+  this.language = humanoidAttributes.language; 
 }
 
 greet() {
@@ -77,9 +74,6 @@ greet() {
 }
 
 }
-
-Humanoid.prototype = Object.create(CharacterStats.prototype);
-
 
  
 /*
@@ -157,11 +151,11 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
-  class Villian {
+  class Villian extends Humanoid {
 
   constructor(villainAttributes){
 
-    Humanoid.call(this, villainAttributes);
+    super(villainAttributes);
     this.laugh = villainAttributes.laugh;
     this.stature = villainAttributes.stature;
 
@@ -173,13 +167,12 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
   }
 
 }
-  Villain.constructor = Object.create(Humanoid.prototype);
+  
 
-
-  class Hero {
+  class Hero extends Humanoid{
 
   constructor(heroAttributes) {
-    Humanoid.call(this, heroAttributes);
+    super(heroAttributes);
     this.nobility = heroAttributes.nobility;
     this.aura = heroAttributes.aura;
   }
@@ -189,8 +182,6 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
     console.log(`The villain has taken 1 dmg! This is his current HP ${this.healthPoints}`);
   }
 }
-
-  Hero.constructor = Object.create(Humanoid.prototype);
 
   const Guts = new Hero({
 
@@ -211,7 +202,7 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
 
   });
 
-  const Griffith = new Villain({
+  const Griffith = new Villian({
  
     createdAt: new Date(),
     dimensions: {
